@@ -40,24 +40,20 @@ def train():
     filename = re.sub("\.epoch[0-9]+$", "", sys.argv[1])
     print("training model...")
     for ei in range(epoch + 1, epoch + num_epochs + 1):
-        ii = 0
         loss_sum = 0
         timer = time()
         for x, y in data:
-            ii += 1
             loss = model(x, y) # forward pass and compute loss
             loss.backward() # compute gradients
             enc_optim.step() # update encoder parameters
             dec_optim.step() # update decoder parameters
-            loss = loss.item()
-            loss_sum += loss
-            # print("epoch = %d, iteration = %d, loss = %f" % (ei, ii, loss))
+            loss_sum += loss.item()
         timer = time() - timer
         loss_sum /= len(data)
         if ei % SAVE_EVERY and ei != epoch + num_epochs:
             save_checkpoint("", None, None, ei, loss_sum, timer)
         else:
-            save_checkpoint(filename, enc, dec, ei, loss_sum, timer)
+            save_checkpoint(filename, self.enc, self.dec, ei, loss_sum, timer)
 
 if __name__ == "__main__":
     if len(sys.argv) != 6:
