@@ -1,6 +1,6 @@
 # Pointer Networks in PyTorch
 
-A minimal PyTorch implementation of Pointer Networks.
+A minimal PyTorch implementation of Pointer Networks (Vinyals et al 2015).
 
 Supported features:
 - Mini-batch training with CUDA
