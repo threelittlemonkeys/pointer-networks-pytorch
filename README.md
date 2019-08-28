@@ -24,12 +24,12 @@ python prepare.py training_data
 
 To train:
 ```
-python train.py model vocab.src vocab.tgt training_data.csv num_epoch
+python train.py model vocab training_data.csv num_epoch
 ```
 
 To predict:
 ```
-python predict.py model.epochN vocab.src vocab.tgt test_data
+python predict.py model.epochN vocab test_data
 ```
 
 ## References
