@@ -3,7 +3,8 @@ from utils import *
 def load_data():
     data = []
     src_vocab = {PAD: PAD_IDX, SOS: SOS_IDX, EOS: EOS_IDX, UNK: UNK_IDX}
-    tgt_vocab = {PAD: PAD_IDX, SOS: SOS_IDX, EOS: EOS_IDX, UNK: UNK_IDX}
+    tgt_vocab = {PAD: PAD_IDX, SOS: SOS_IDX, EOS: EOS_IDX}
+    offset = len(tgt_vocab)
     fo = open(sys.argv[1])
     for line in fo:
         src, tgt = line.split("\t")
@@ -21,7 +22,8 @@ def load_data():
             src_seq.append(str(src_vocab[w]))
         for w in tgt_tokens:
             if w not in tgt_vocab:
-                tgt_vocab[w] = len(tgt_vocab)
+                for i in range(len(tgt_vocab), int(w) + offset + 1):
+                    tgt_vocab[str(i - offset)] = i
             tgt_seq.append(str(tgt_vocab[w]))
         data.append((src_seq, tgt_seq))
     fo.close()
