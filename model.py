@@ -19,12 +19,10 @@ class ptrnet(nn.Module): # pointer networks
         self.dec.hidden = self.enc.hidden
         for t in range(y.size(1)):
             dec_out = self.dec(dec_in, enc_out, t, mask)
-            print(y)
-            print(y.data.ne(PAD_IDX))
-            exit()
-            loss += F.nll_loss(dec_out, y[:, t], ignore_index = PAD_IDX, reduction = "sum")
+            loss += F.nll_loss(dec_out, y[:, t] - 1, ignore_index = PAD_IDX -1)
             dec_in = y[:, t].unsqueeze(1) # teacher forcing
-        loss /= y.data.gt(0).sum().float() # divide by the number of unpadded tokens
+        loss /= y.size(1) # divide by senquence length
+        # loss /= y.gt(0).sum().float() # divide by the number of unpadded tokens
         return loss
 
     def decode(self): # for inference

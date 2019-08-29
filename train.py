@@ -12,7 +12,7 @@ def load_data():
     for line in fo:
         x, y = line.strip().split("\t")
         x = [int(i) for i in x.split(" ")]
-        y = [int(i) + 1 for i in y.split(" ")] + [len(x) + 1]
+        y = [int(i) for i in y.split(" ")]
         bx.append(x)
         by.append(y)
         if len(by) == BATCH_SIZE:
@@ -49,9 +49,9 @@ def train():
         timer = time() - timer
         loss_sum /= len(data)
         if ei % SAVE_EVERY and ei != epoch + num_epochs:
-            save_checkpoint("", None, None, ei, loss_sum, timer)
+            save_checkpoint("", None, ei, loss_sum, timer)
         else:
-            save_checkpoint(filename, self.enc, self.dec, ei, loss_sum, timer)
+            save_checkpoint(filename, model, ei, loss_sum, timer)
 
 if __name__ == "__main__":
     if len(sys.argv) != 5:
