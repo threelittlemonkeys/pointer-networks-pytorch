@@ -7,7 +7,7 @@ def evaluate(result, summary = False):
     tpfp = defaultdict(int) # true positives + false positives
     for _, y0, y1 in result: # actual value, prediction
         for y in y0:
-            tp[y] += y in y1
+            tp[y] += (y in y1)
             tpfn[y] += 1
         for y in y1:
             tpfp[y] += 1
