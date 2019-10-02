@@ -26,20 +26,30 @@ def save_data(filename, data):
         fo.write(" ".join(seq[0]) + "\t" + " ".join(seq[1]) + "\n")
     fo.close()
 
-def load_vocab(filename):
-    print("loading %s..." % filename)
-    vocab = {}
+def load_idx_to_tkn(filename):
+    print("loading %s" % filename)
+    idx_to_tkn = []
     fo = open(filename)
     for line in fo:
         line = line[:-1]
-        vocab[line] = len(vocab)
+        idx_to_tkn.append(line)
     fo.close()
-    return vocab
+    return idx_to_tkn
 
-def save_vocab(filename, vocab):
+def load_tkn_to_idx(filename):
+    print("loading %s" % filename)
+    tkn_to_idx = {}
+    fo = open(filename)
+    for line in fo:
+        line = line[:-1]
+        tkn_to_idx[line] = len(tkn_to_idx)
+    fo.close()
+    return tkn_to_idx
+
+def save_tkn_to_idx(filename, tkn_to_idx):
     fo = open(filename, "w")
-    for w, _ in sorted(vocab.items(), key = lambda x: x[1]):
-        fo.write("%s\n" % w)
+    for tkn, _ in sorted(tkn_to_idx.items(), key = lambda x: x[1]):
+        fo.write("%s\n" % tkn)
     fo.close()
 
 def load_checkpoint(filename, model = None):
