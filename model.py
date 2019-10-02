@@ -36,7 +36,7 @@ class encoder(nn.Module):
         # architecture
         self.embed = embed(-1, vocab_size)
         self.rnn = getattr(nn, RNN_TYPE)(
-            input_size = sum(EMBED.values()),
+            input_size = EMBED_SIZE,
             hidden_size = HIDDEN_SIZE // NUM_DIRS,
             num_layers = NUM_LAYERS,
             bias = True,
@@ -68,7 +68,7 @@ class decoder(nn.Module):
         # architecture
         self.embed = embed(-1, vocab_size)
         self.rnn = getattr(nn, RNN_TYPE)(
-            input_size = sum(EMBED.values()),
+            input_size = EMBED_SIZE,
             hidden_size = HIDDEN_SIZE // NUM_DIRS,
             num_layers = NUM_LAYERS,
             bias = True,
