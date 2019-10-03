@@ -47,4 +47,6 @@ Abigail See, Peter J. Liu, Christopher D. Manning. 2017. [Get To The Point: Summ
 
 Oriol Vinyals, Meire Fortunato, Navdeep Jaitly. 2015. [Pointer Networks.](https://arxiv.org/abs/1506.03134) In NIPS.
 
+Oriol Vinyals, Samy Bengio, Manjunath Kudlur. 2015. [Order Matters: Sequence to sequence for sets.](https://arxiv.org/abs/1511.06391) In ICLR.
+
 Feifei Zhai, Saloni Potdar, Bing Xiang, Bowen Zhou. 2017. [Neural Models for Sequence Chunking.](https://arxiv.org/abs/1701.04027) In AAAI.
