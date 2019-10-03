@@ -52,6 +52,22 @@ def save_tkn_to_idx(filename, tkn_to_idx):
         fo.write("%s\n" % tkn)
     fo.close()
 
+def load_vocab(filename):
+    print("loading %s..." % filename)
+    vocab = {}
+    fo = open(filename)
+    for line in fo:
+        line = line[:-1]
+        vocab[line] = len(vocab)
+    fo.close()
+    return vocab
+
+def save_vocab(filename, vocab):
+    fo = open(filename, "w")
+    for w, _ in sorted(vocab.items(), key = lambda x: x[1]):
+        fo.write("%s\n" % w)
+    fo.close()
+
 def load_checkpoint(filename, model = None):
     print("loading model...")
     checkpoint = torch.load(filename)
