@@ -66,4 +66,6 @@ def train():
 if __name__ == "__main__":
     if len(sys.argv) not in [6, 7]:
         sys.exit("Usage: %s model char_to_idx word_to_idx training_data (validation data) num_epoch" % sys.argv[0])
+    if len(sys.argv) == 6:
+        EVAL_EVERY = False
     train()
