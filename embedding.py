@@ -3,7 +3,7 @@ from utils import *
 class embed(nn.Module):
     def __init__(self, char_vocab_size, word_vocab_size, hre = False):
         super().__init__()
-        self.hre = hre
+        self.hre = hre # hierarchical recurrent encoding
 
         # architecture
         for model, dim in EMBED.items():
@@ -15,7 +15,7 @@ class embed(nn.Module):
                 self.word_embed = nn.Embedding(word_vocab_size, dim, padding_idx = PAD_IDX)
             elif model == "sae":
                 self.word_embed = self.sae(word_vocab_size, dim)
-        if self.hre: # hierarchical recurrent encoding
+        if self.hre:
             self.sent_embed = self.rnn(EMBED_SIZE, EMBED_SIZE, True)
         self = self.cuda() if CUDA else self
 
@@ -50,7 +50,7 @@ class embed(nn.Module):
         def forward(self, x):
             b = x.size(0) # batch_size (B)
             x = x.view(-1, x.size(2)) # [B * word_seq_len (Lw), char_seq_len (Lc)]
-            x = self.embed(x) # [B * Lw, Lc, dim (H)]
+            x = self.embed(x) # [B * Lw, Lc, dim]
             x = x.unsqueeze(1) # [B * Lw, Ci, Lc, W]
             h = [conv(x) for conv in self.conv] # [B * Lw, Co, Lc, 1] * K
             h = [F.relu(k).squeeze(3) for k in h] # [B * Lw, Co, Lc] * K
@@ -115,17 +115,12 @@ class embed(nn.Module):
             self.layers = nn.ModuleList([self.layer(dim) for _ in range(num_layers)])
 
         def forward(self, x):
-            mask = self.maskset(x)
+            mask = x.eq(PAD_IDX).view(x.size(0), 1, 1, -1)
             x = self.embed(x)
             h = x + self.pe[:x.size(1)]
             for layer in self.layers:
-                h = layer(h, mask[0])
+                h = layer(h, mask)
             return h
-
-        @staticmethod
-        def maskset(x): # set of mask and lengths
-            mask = x.eq(PAD_IDX)
-            return (mask.view(x.size(0), 1, 1, -1), x.size(1) - mask.sum(1))
 
         @staticmethod
         def pos_encoding(dim, maxlen = 1000): # positional encoding
@@ -174,7 +169,7 @@ class embed(nn.Module):
                 return a # attention weights
 
             def forward(self, q, k, v, mask):
-                b = x.size(0) # batch_size (B)
+                b = q.size(0) # batch_size (B)
                 x = q # identity
                 q = self.Wq(q).view(b, -1, self.H, self.Dk).transpose(1, 2)
                 k = self.Wk(k).view(b, -1, self.H, self.Dk).transpose(1, 2)
