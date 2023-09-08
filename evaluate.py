@@ -1,10 +1,12 @@
 from predict import *
 
 def evaluate(result, summary = False):
+
     avg = defaultdict(float) # average
     tp = defaultdict(int) # true positives
     tpfn = defaultdict(int) # true positives + false negatives
     tpfp = defaultdict(int) # true positives + false positives
+
     for _, y0, y1 in result: # actual value, prediction
         '''
         # evaluate on a sequence basis
@@ -20,6 +22,7 @@ def evaluate(result, summary = False):
             tpfn[y] += 1
         for y in y1:
             tpfp[y] += 1
+
     for y in sorted(tpfn.keys()):
         pr = (tp[y] / tpfp[y]) if tpfp[y] else 0
         rc = (tp[y] / tpfn[y]) if tpfn[y] else 0
@@ -31,6 +34,7 @@ def evaluate(result, summary = False):
             print("recall = %f (%d/%d)" % (rc, tp[y], tpfn[y]))
             print("f1 = %f" % f1(pr, rc))
             print()
+
     avg["macro_pr"] /= len(tpfn)
     avg["macro_rc"] /= len(tpfn)
     avg["micro_f1"] = sum(tp.values()) / sum(tpfn.values())
@@ -40,6 +44,8 @@ def evaluate(result, summary = False):
     print("micro f1 = %f" % avg["micro_f1"])
 
 if __name__ == "__main__":
+
     if len(sys.argv) != 5:
         sys.exit("Usage: %s model char_to_idx word_to_idx test_data" % sys.argv[0])
+
     evaluate(predict(sys.argv[4], *load_model()))
