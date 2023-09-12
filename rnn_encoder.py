@@ -35,9 +35,9 @@ class rnn_encoder(nn.Module):
         s = self.init_state(b)
         lens = lens.cpu()
 
-        x = self.embed(b, xc, xw)
+        x = xh = self.embed(b, xc, xw)
         x = nn.utils.rnn.pack_padded_sequence(x, lens, batch_first = True, enforce_sorted = False)
         h, s = self.rnn(x, s)
         h, _ = nn.utils.rnn.pad_packed_sequence(h, batch_first = True)
 
-        return h, s
+        return xh, h, s

@@ -26,17 +26,17 @@ class pointer_networks(nn.Module):
         loss = 0
         mask, lens = maskset(y0)
 
-        self.dec.M, self.dec.H = self.enc(xc, xw, lens)
+        xh, self.dec.M, self.dec.H = self.enc(xc, xw, lens)
         self.init_state(b)
         yc = LongTensor([[[SOS_IDX]]] * b)
         yw = LongTensor([[SOS_IDX]] * b)
+        yi = self.enc.embed(b, yc, yw)
 
         for t in range(y0.size(1)):
-            yo = self.dec(yc, yw, mask)
-            y1 = y0[:, t] - 1 # teacher forcing
-            loss += F.nll_loss(yo, y1, ignore_index = PAD_IDX - 1)
-            yc = torch.cat([xc[i, j] for i, j in enumerate(y1)]).view(b, 1, -1)
-            yw = LongTensor([xw[i, j] for i, j in enumerate(y1)]).unsqueeze(1)
+            yo = self.dec(yi, mask)
+            yi = y0[:, t] - 1 # teacher forcing
+            loss += F.nll_loss(yo, yi, ignore_index = PAD_IDX - 1)
+            yi = torch.cat([xh[i, j] for i, j in enumerate(yi)]).view(b, 1, -1)
 
         loss /= y0.size(1) # average over timesteps
 

@@ -14,9 +14,8 @@ class rnn_decoder(nn.Module):
         self.h = None # decoder output
 
         # architecture
-        self.embed = embed(EMBED, cti, wti, batch_first = True)
         self.rnn = getattr(nn, RNN_TYPE)(
-            input_size = self.embed.dim,
+            input_size = sum(EMBED.values()),
             hidden_size = HIDDEN_SIZE // NUM_DIRS,
             num_layers = NUM_LAYERS,
             bias = True,
@@ -26,13 +25,12 @@ class rnn_decoder(nn.Module):
         )
         self.attn = attn()
 
-    def forward(self, yc, yw, mask):
+    def forward(self, yi, mask):
 
-        x = self.embed(EMBED, yc, yw)
-        h, self.H = self.rnn(x, self.H)
-        y = self.attn(self.M, h, mask)
+        h, self.H = self.rnn(yi, self.H)
+        yo = self.attn(self.M, h, mask)
 
-        return y
+        return yo
 
 class attn(nn.Module): # content based input attention
 

@@ -3,13 +3,14 @@ import random
 
 # generate lists of random numbers
 
-if len(sys.argv) != 5:
-    sys.exit("Usage: %s unit max_num max_len data_size" % sys.argv[0])
+if len(sys.argv) != 6:
+    sys.exit("Usage: %s unit max_num max_width max_height data_size" % sys.argv[0])
 
 unit = sys.argv[1] # unit
 max_num = int(sys.argv[2]) # maximum number
-max_len = int(sys.argv[3]) # maximum sequence lengh
-data_size = int(sys.argv[4]) # data size
+max_width = int(sys.argv[3]) # maximum sequence lengh
+max_height = int(sys.argv[4]) # maximum sequence lengh
+data_size = int(sys.argv[5]) # data size
 data = range(0, max_num + 1)
 
 def sorted_idxs(xs):
@@ -18,7 +19,7 @@ def sorted_idxs(xs):
 if unit == "word":
     pl = set()
     while len(pl) < data_size:
-        xs = tuple(random.sample(data, random.randint(1, max_len)))
+        xs = tuple(random.sample(data, random.randint(1, max_width)))
         if xs in pl:
             continue
         pl.add(xs)
@@ -27,10 +28,10 @@ if unit == "word":
 
 if unit == "sent":
     for z0 in range(data_size):
-        z1 = random.randint(1, max_len)
+        z1 = random.randint(1, max_height)
         xs = []
         while len(xs) < z1:
-            x = random.sample(data, random.randint(1, max_len))
+            x = random.sample(data, random.randint(1, max_width))
             if sum(x) not in map(sum, xs): # same sum not allowed
                 xs.append(x)
         ys = sorted_idxs(list(map(sum, xs)))
