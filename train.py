@@ -1,7 +1,7 @@
 from utils import *
-from evaluate import *
 from dataloader import *
 from pointer_networks import *
+from evaluate import *
 
 def load_data():
 
