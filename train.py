@@ -10,7 +10,7 @@ def load_data():
     cti = load_tkn_to_idx(sys.argv[2]) # char_to_idx
     wti = load_tkn_to_idx(sys.argv[3]) # word_to_idx
 
-    print("loading %s..." % sys.argv[4])
+    print(f"loading {sys.argv[4]}")
 
     with open(sys.argv[4], "r") as fo:
         text = fo.read().strip().split("\n" * (HRE + 1))
@@ -50,7 +50,7 @@ def train():
     epoch = load_checkpoint(sys.argv[1], model) if isfile(sys.argv[1]) else 0
     filename = re.sub("\.epoch[0-9]+$", "", sys.argv[1])
 
-    print("training model...")
+    print("training model")
 
     for ei in range(epoch + 1, epoch + num_epochs + 1):
 
